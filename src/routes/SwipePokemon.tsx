@@ -1,7 +1,7 @@
 import { MutableRefObject, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { generateRandomNumbers } from "../utils"; 
-import PokemonCardDataAccess from "../components/PokemonCardDataAccess";
+import PokemonCardDataAccess from "../components/PokemonCardDataFetcher";
 
 export type TSwipePokemonProps = {
   idIndexRef: MutableRefObject<number>;

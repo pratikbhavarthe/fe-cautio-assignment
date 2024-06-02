@@ -3,17 +3,10 @@ import { motion, useAnimate, useMotionValue, useTransform } from "framer-motion"
 import { useFavouritesContext } from "../hooks/useFavouritesContext";
 import Label from "./Label";
 
-
 export type TPokemonRes = {
-  name: string;
-  sprites: {
-    other: {
-      dream_world: {
-        front_default: string;
-      };
-    };
-  };
   abilities: { ability: { name: string } }[];
+  name: string;
+  sprites: { other: { dream_world: { front_default: string } } };
 };
 
 export type TPokemonCardProps = {
@@ -27,13 +20,13 @@ export type TPokemonCardProps = {
 
 const PokemonCard = ({
   data,
-  isPending,
+  isPending = false,
   position,
   id,
   shift,
   onlyViewMode,
 }: TPokemonCardProps) => {
-  const [darkMode, setDarkMode] = useState(false); // State for dark mode
+  const [darkMode, setDarkMode] = useState(false);
   const [scope, animate] = useAnimate();
   const motionValue = useMotionValue(0);
   const rotateValue = useTransform(motionValue, [-200, 200], [-50, 50]);
@@ -46,8 +39,9 @@ const PokemonCard = ({
   };
 
   const onLikeOrDislike = (isLike: boolean, shiftImmediately?: boolean) => {
-    if (isLike)
+    if (isLike) {
       setFavourites((currentFavourites) => [...currentFavourites, data]);
+    }
 
     animate(scope.current, { x: isLike ? 100 : -100 });
     setTimeout(() => shift?.(), shiftImmediately ? 0 : 140);
@@ -118,11 +112,12 @@ const PokemonCard = ({
             animate={{ opacity: 1 }}
             draggable={false}
             className="w-60 object-contain h-60 my-2 mx-auto"
-            src={data?.sprites.other.dream_world.front_default}
+            src={data.sprites.other.dream_world.front_default}
+            alt={data.name}
           />
-          <h4 className="text-2xl capitalize">{data?.name}</h4>
+          <h4 className="text-2xl capitalize">{data.name}</h4>
           <div className="flex flex-wrap gap-2 mt-3 mb-2">
-            {data?.abilities.map(({ ability }) => (
+            {data.abilities.map(({ ability }) => (
               <Label key={ability.name} text={ability.name} />
             ))}
           </div>

@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useState} from "react";
-import { TPokemonRes } from "../hooks/useFetchPokemon";
+import { TPokemonRes } from "../hooks/useGetPokemon";
 
 type TFavouritesContext = {
   favourites: TPokemonRes[];
