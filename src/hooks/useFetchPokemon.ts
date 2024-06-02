@@ -14,7 +14,7 @@ const fetchPokemon = async (id: number) => {
     return response.data
 }
 
-export const useGetPokemon = (id: number) => {
+export const useFetchPokemon = (id: number) => {
     return useQuery({
         queryFn: () => fetchPokemon(id),
         queryKey: ['pokemon', id]
