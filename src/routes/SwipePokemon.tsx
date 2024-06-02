@@ -1,7 +1,7 @@
 import { MutableRefObject, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { generateRandomNumbers } from "../utils"; 
-import PokemonCardDataAccess from "../components/PokemonCardDataFetcher";
+import PokeCardDataFetcher from "../components/PokeCardDataFetcher";
 
 export type TSwipePokemonProps = {
   idIndexRef: MutableRefObject<number>;
@@ -35,7 +35,7 @@ const SwipePokemon = ({ idIndexRef }: TSwipePokemonProps) => {
       <div className="relative h-[min(90vh,500px)] flex place-content-center">
         <AnimatePresence>
           {currentPokemonIds.map((id, index) => (
-            <PokemonCardDataAccess
+            <PokeCardDataFetcher
               key={id}
               id={id}
               shift={shift}
