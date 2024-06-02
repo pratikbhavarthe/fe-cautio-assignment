@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { TPokemonRes } from "../hooks/useFetchPokemon";
-import Label from "./Label";
-import { motion, useAnimation, useMotionValue, useTransform } from "framer-motion";
-import { useLikesContext } from "../hooks/useLikesContext";
-import { useRef } from "react";
+import Badge from "./Label";
+import {
+  motion,
+  useAnimate,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
+import { useFavouritesContext } from "../hooks/useFavouritesContext";
 
 export type TPokemonCardProps = {
   data: TPokemonRes;
@@ -22,59 +26,62 @@ const PokemonCard = ({
   shift,
   onlyViewMode,
 }: TPokemonCardProps) => {
-  const animationControls = useAnimation();
+  const [scope, animate] = useAnimate();
   const motionValue = useMotionValue(0);
+  //get rotate value based on motionValue
   const rotateValue = useTransform(motionValue, [-200, 200], [-50, 50]);
+  //change opacity based on rotation value
   const opacityValue = useTransform(rotateValue, [-200, 0, 200], [0, 1, 0]);
+  // change translate value based on rotation
   const translateValue = useTransform(
     rotateValue,
     [-10, 0, 10],
     [-100, 0, 100]
   );
-  const { likes, setLikes } = useLikesContext();
-
-  const containerRef = useRef<HTMLDivElement>(null); // Ref to capture the motion.div element
+  const { favourites, setFavourites } = useFavouritesContext();
 
   const onLikeOrDislike = (isLike: boolean, shiftImmediately?: boolean) => {
-    if (isLike) {
-      setLikes((currentFavourites) => [...currentFavourites, data]);
-    }
-    animationControls.start({
-      x: isLike ? 100 : -100,
-      transition: { duration: 0.3 },
-    });
+    if (isLike)
+      setFavourites((currentFavourites) => [...currentFavourites, data]);
+    //keep the card swiped after drag release until it disappears
+    animate(scope.current, { x: isLike ? 100 : -100 });
+    //remove current card from state
     setTimeout(() => shift?.(), shiftImmediately ? 0 : 140);
   };
 
   useEffect(() => {
-    if (animationControls) {
-      animationControls.start({
+    if (scope.current) {
+      //scale down card and move it down
+      //when not in first position
+      animate(scope.current, {
         translateY: position === 1 ? 0 : position === 2 ? 30 : 60,
         scaleX: position === 1 ? 1 : position === 2 ? 0.95 : 0.85,
       });
     }
-  }, [animationControls, position]);
+  }, [animate, position, scope]);
 
   useEffect(() => {
     if (
-      animationControls &&
-      likes.length === 0 &&
+      scope.current &&
+      favourites.length === 0 &&
       position === 1 &&
       !isPending
     ) {
+      //when no favourites are added and page is loaded show a swipe
+      //left & right animation to show that cards are swipeable
       setTimeout(() => {
-        animationControls.start({
+        animate(scope.current, {
           x: [0, 10, 0, -10, 0],
-          transition: { duration: 3 },
+          duration: 3,
         });
       }, 1000);
     }
-  }, [animationControls, likes.length, position, isPending]);
+  }, [animate, favourites.length, position, scope, isPending]);
 
   return (
     <motion.div
       drag={position === 1 && !isPending && !onlyViewMode ? "x" : false}
-      ref={containerRef}
+      ref={scope}
       key={id}
       className={`${
         onlyViewMode ? "static" : "absolute flex-grow"
@@ -121,7 +128,7 @@ const PokemonCard = ({
           <h4 className="text-2xl first-letter:uppercase">{data?.name}</h4>
           <div className="flex flex-wrap gap-2 mt-3 mb-2">
             {data?.abilities.map(({ ability }) => (
-              <Label key={ability.name} text={ability.name} />
+              <Badge key={ability.name} text={ability.name} />
             ))}
           </div>
           {!onlyViewMode && (
