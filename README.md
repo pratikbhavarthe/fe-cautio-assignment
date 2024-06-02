@@ -14,8 +14,8 @@ Efficiently manage Pokémon data and user preferences within the application, pr
 # Intuitive User Interactions
 Engage users with intuitive "Like" and "Dislike" interactions, empowering them to curate their Pokémon collection effortlessly.
 
-# Dynamic Content via REST API
-Fetch captivating Pokémon data from the PokéAPI, enriching the user experience with real-time content updates.
+# Dynamic Content via Tanstack Query
+PokéSwipe utilizes Tanstack Query to fetch Pokémon data from the PokéAPI, ensuring real-time updates and seamless user interaction with dynamic content.
 
 # Getting Started
 To begin your PokéSwipe adventure, follow these simple steps:
