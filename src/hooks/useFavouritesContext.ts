@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { LikesContext } from "../contexts/LikesContext";
+import { FavouritesContext } from "../contexts/FavouritesContext";
 
 // Custom hook to access the LikesContext
-export const useLikesContext = () => {
-  const context = useContext(LikesContext);
+export const useFavouritesContext = () => {
+  const context = useContext(FavouritesContext);
   
   if (context === undefined) {
     throw new Error("Ensure you use `useLikesContext` within a `LikesProvider`");

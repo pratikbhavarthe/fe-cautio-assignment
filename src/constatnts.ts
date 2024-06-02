@@ -1,1 +1,0 @@
-export const paths = {home: "/", swipe: "/swipe", likes: "/likes"} as const;
